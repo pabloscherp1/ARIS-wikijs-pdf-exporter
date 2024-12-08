@@ -1,0 +1,45 @@
+version: "3"
+env:
+  SITE_PDF_EXPORTER_IMAGE: ghcr.io/raje-sh/site-exporter-pdf:latest
+  PG_CONTAINER_NAME: wiki_postgres
+vars:
+  WS_DIR: '{{.LWS_DIR | default "."}}'
+  WIKI_BASE_URL: '{{.WIKI_BASE_URL | default "http://localhost:3000" }}'
+dotenv: [".env"]
+
+tasks:
+  pdf:export:
+    cmds:
+      - |
+        docker run -it -e WIKI_BASE_URL="{{.WIKI_BASE_URL}}" -e WIKIJS_JWT_TOKEN=$WIKIJS_JWT_TOKEN \
+          --rm -v {{.WS_DIR}}/config.yml:/app/config.yml:ro \
+          -v {{.WS_DIR}}/out:/app/out --network="host" $SITE_PDF_EXPORTER_IMAGE {{.CLI_ARGS}}
+  up:
+    cmds:
+      - docker compose up -d
+      - task: db:import
+  down:
+    cmds:
+      - task: db:export
+      - docker compose down -v
+  db:import:
+    silent: true
+    cmds:
+      - docker compose down wiki
+      - docker container exec $PG_CONTAINER_NAME bash -c "psql -U $PG_USR_NAME -d $DEFAULT_DB_NAME -c '{{.DROP_QUERY}}'"
+      - docker container exec $PG_CONTAINER_NAME bash -c "psql -U $PG_USR_NAME -d $DEFAULT_DB_NAME -c '{{.CREATE_QUERY}}'"
+      - docker container cp $BACKUP_SQL_PATH $PG_CONTAINER_NAME:/backup.sql
+      - docker container exec $PG_CONTAINER_NAME bash -c "psql -U $PG_USR_NAME -d $PG_DB_NAME -f /backup.sql -q -o /dev/null"
+      - docker compose up -d wiki
+    env:
+      DEFAULT_DB_NAME: postgres
+      BACKUP_SQL_PATH: ./backup.sql
+    vars:
+      DROP_QUERY:
+        sh: echo "DROP DATABASE IF EXISTS {{.PG_DB_NAME}};";
+      CREATE_QUERY:
+        sh: echo "CREATE DATABASE {{.PG_DB_NAME}};";
+  db:export:
+    cmds:
+      - docker container exec $PG_CONTAINER_NAME bash -c "pg_dump -U $PG_USR_NAME -d $PG_DB_NAME > /backup.sql"
+      - docker container cp $PG_CONTAINER_NAME:/backup.sql backup.sql

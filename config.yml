@@ -1,0 +1,17 @@
+site:
+  baseUrl: ${WIKI_BASE_URL}
+  links:
+    - en/rocketry/teams/HERMES/Systems_Engineering/2025_HER_SEMP
+  cookies:
+    - key: jwt
+      value: ${WIKIJS_JWT_TOKEN}
+browser:
+  headless: ${CHROMIUM_HEADLESS_MODE:-true}
+  inject:
+    css:
+      - content: |
+          nav.v-navigation-drawer,header.v-sheet,footer.v-footer{display: none;}
+          main.v-main{padding: 0 !important;}
+concurrency: 1
+output:
+  filename: Systems Engineering Management Plan (SEMP)
