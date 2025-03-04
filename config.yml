@@ -1,7 +1,22 @@
 site:
   baseUrl: ${WIKI_BASE_URL}
   links:
-    - en/rocketry/teams/HERMES/Systems_Engineering/2025_HER_SEMP
+    - en/rocketry/teams/HERMES/Systems_Engineering/ICD_Export/AVN_HEP_ICD
+    - en/rocketry/teams/HERMES/Systems_Engineering/ICD_Export/AVN_REC_ICD
+    - en/rocketry/teams/HERMES/Systems_Engineering/ICD_Export/AVN_RFS_ICD
+    - en/rocketry/teams/HERMES/Systems_Engineering/ICD_Export/AVN_SFW_ICD
+    - en/rocketry/teams/HERMES/Systems_Engineering/ICD_Export/AVN_STR_ICD
+    - en/rocketry/teams/HERMES/Systems_Engineering/ICD_Export/HEP_RFS_ICD
+    - en/rocketry/teams/HERMES/Systems_Engineering/ICD_Export/HEP_SFW_ICD
+    - en/rocketry/teams/HERMES/Systems_Engineering/ICD_Export/HEP_STR_ICD
+    - en/rocketry/teams/HERMES/Systems_Engineering/ICD_Export/PSS_HEP_ICD
+    - en/rocketry/teams/HERMES/Systems_Engineering/ICD_Export/PSS_RFS_ICD
+    - en/rocketry/teams/HERMES/Systems_Engineering/ICD_Export/PSS_STR_ICD
+    - en/rocketry/teams/HERMES/Systems_Engineering/ICD_Export/REC_SFW_ICD
+    - en/rocketry/teams/HERMES/Systems_Engineering/ICD_Export/REC_STR_ICD
+    - en/rocketry/teams/HERMES/Systems_Engineering/ICD_Export/RFS_SFW_ICD
+    - en/rocketry/teams/HERMES/Systems_Engineering/ICD_Export/RFS_STR_ICD
+
   cookies:
     - key: jwt
       value: ${WIKIJS_JWT_TOKEN}
@@ -14,4 +29,4 @@ browser:
           main.v-main{padding: 0 !important;}
 concurrency: 1
 output:
-  filename: Systems Engineering Management Plan (SEMP)
+  filename: ICD
